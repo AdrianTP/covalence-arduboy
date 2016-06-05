@@ -1,15 +1,21 @@
 #ifndef GAME_H
 #define GAME_H
 
+class Board;
+class Generator;
+class Manifest;
+
 class Game {
-	Board board;
-	Generator generator;
-	Manifest manifest;
+	private:
+		Board* board;
+		Generator* generator;
+		Manifest* manifest;
 
 	public:
-	Game();
-	void setup();
-	void tick();
+		Game();
+		virtual ~Game();
+		void setup();
+		void tick();
 };
 
 #endif

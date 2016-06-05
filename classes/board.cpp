@@ -13,15 +13,17 @@ Board::Board() {
 //			board.at(x, y) = 0;
 		}
 	}
-}
+};
+
+Board::~Board() {};
 
 int Board::readCellAtCoords(int x, int y) {
 	return board[x][y];
-}
+};
 
 void Board::emptyCellAtCoords(int x, int y) {
 	board[x][y] = 0;
-}
+};
 
 int Board::writeCellAtCoords(int x, int y, int atom) {
 	int oldContents = board[x][y];
@@ -29,4 +31,4 @@ int Board::writeCellAtCoords(int x, int y, int atom) {
 	board[x][y] = atom;
 
 	return oldContents;
-}
+};

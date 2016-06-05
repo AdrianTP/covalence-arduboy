@@ -8,7 +8,9 @@ Generator::Generator(int seed) {
 //	if (seed == 1) {
 //		randomSeed(RANDOM_SEED_VALUE);
 //	}
-}
+};
+
+Generator::~Generator() {};
 
 //int Generator::randomInt() {
 //	int atomValence = random(1, 5);
@@ -23,7 +25,7 @@ Generator::Generator(int seed) {
 //
 //	id++;
 //	numAtoms++;
-//}
+//};
 //
 //void Generator::scoot() {
 //	for (int i = 0; i < numAtoms; i ++) {
@@ -33,7 +35,7 @@ Generator::Generator(int seed) {
 //			queue[i] = queue[i + 1];
 //		}
 //	}
-//}
+//};
 //
 //Atom Generator::removeAtom() {
 //	if (numAtoms === 0) {
@@ -47,4 +49,4 @@ Generator::Generator(int seed) {
 //	scoot();
 //
 //	return atom;
-//}
+//};

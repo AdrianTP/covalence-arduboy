@@ -4,16 +4,18 @@
 #include "../headers/manifest.h"
 #include "../headers/game.h"
 
-Game::Game() {}
+Game::Game() {};
+
+Game::~Game() {};
 
 void Game::setup() {
 	// TODO: setup game
-	board = new Board();
-	generator = new Generator(RANDOM_SEED_FLAG);
-	manifest = new Manifest();
-}
+//	board = new Board();
+//	generator = new Generator(RANDOM_SEED_FLAG);
+//	manifest = new Manifest();
+};
 
 void Game::tick() {
 	// TODO:
 	// Generate atom
-}
+};

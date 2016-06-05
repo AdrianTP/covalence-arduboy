@@ -3,14 +3,14 @@
 
 class Board {
 	private:
-	int board[BOARD_WIDTH][BOARD_HEIGHT]; // TODO: multidimensional array BOARD_WIDTH by BOARD_HEIGHT
-//	Array2D board;
+		int board[BOARD_WIDTH][BOARD_HEIGHT]; // TODO: multidimensional array BOARD_WIDTH by BOARD_HEIGHT
 
 	public:
-	Board();
-	int readCellAtCoords(int x, int y);
-	void emptyCellAtCoords(int x, int y);
-	int writeCellAtCoords(int x, int y, int atomIndexInManifest);
+		Board();
+		virtual ~Board();
+		int readCellAtCoords(int x, int y);
+		void emptyCellAtCoords(int x, int y);
+		int writeCellAtCoords(int x, int y, int atomIndexInManifest);
 };
 
 #endif
