@@ -121,8 +121,6 @@ void Game::handlePlayInput() {
 
 	if (this->arduboy->pressed(B_BUTTON)) {
 		this->currentState = STATE_MENU_PAUSE;
-		this->drawMenu(MENU_PAUSE);
-//		this->loadSpecifiedState(STATE_MENU_PAUSE); // TODO: go to pause screen
 	}
 };
 
