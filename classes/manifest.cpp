@@ -9,6 +9,18 @@ Manifest::Manifest() {
 
 Manifest::~Manifest() {};
 
+int Manifest::addAtom(int valence) {
+	for (int i = 0; i < this->maxLength; i ++) {
+		if (this->manifest[i]->isActive() == false) {
+			this->manifest[i]->activate(valence);
+
+			return i;
+		}
+	}
+
+	return -1;
+};
+
 void Manifest::init() {
 	for (int i = 0; i < this->maxLength; i ++) {
 		this->manifest[i] = new Atom();

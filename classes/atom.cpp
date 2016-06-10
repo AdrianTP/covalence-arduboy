@@ -17,19 +17,19 @@ void Atom::deactivate() {
 };
 
 void Atom::makeBond(int dir, int id) {
-	if (canBond() == 1) {
+	if (this->canBond()) {
 		switch (dir) {
 			case 12: // north
-				bond_north = id;
+				this->bond_north = id;
 				break;
 			case 3: // east
-				bond_east = id;
+				this->bond_east = id;
 				break;
 			case 6: // south
-				bond_south = id;
+				this->bond_south = id;
 				break;
 			case 9: // west
-				bond_west = id;
+				this->bond_west = id;
 				break;
 		}
 
@@ -38,61 +38,56 @@ void Atom::makeBond(int dir, int id) {
 };
 
 int Atom::breakBond(int dir) {
-	int id = 0;
+	int bondId = 0;
 
 	switch (dir) {
 		case 12: // north
-			id = bond_north;
-			bond_north = 0;
+			bondId = bond_north;
+			this->bond_north = 0;
 			break;
 		case 3: // east
-			id = bond_east;
-            bond_east = 0;
+			bondId = bond_east;
+			this->bond_east = 0;
 			break;
 		case 6: // south
-			id = bond_south;
-            bond_south = 0;
+			bondId = bond_south;
+			this->bond_south = 0;
 			break;
 		case 9: // west
-			id = bond_west;
-		    bond_west = 0;
+			bondId = bond_west;
+			this->bond_west = 0;
 			break;
 	}
 
-	if (id > 0 && numBonds > 0) {
-		numBonds --;
+	if (bondId > 0 && this->numBonds > 0) {
+		this->numBonds --;
 	}
 
-	return id;
-};
-
-int Atom::getId() {
-	return id;
+	return bondId;
 };
 
 int Atom::getValence() {
-	return valence;
+	return this->valence;
 };
 
 int Atom::getPoints() {
-	return numBonds * SCORE_MULTIPLIER;
+	return this->numBonds * SCORE_MULTIPLIER;
 };
 
-int Atom::canBond() {
-	if (numBonds < valence) {
-		return 1;
-	} else {
-		return 0;
-	}
+bool Atom::canBond() {
+	return this->numBonds < this->valence;
 };
 
 void Atom::init() {
-	active = false;
-	bond_north = 0;
-	bond_east = 0;
-	bond_south = 0;
-	bond_west = 0;
-	id = 0;
-	numBonds = 0;
-	valence = 0;
+	this->active = false;
+	this->bond_north = 0;
+	this->bond_east = 0;
+	this->bond_south = 0;
+	this->bond_west = 0;
+	this->numBonds = 0;
+	this->valence = 0;
+};
+
+bool Atom::isActive() {
+	return this->active;
 };
