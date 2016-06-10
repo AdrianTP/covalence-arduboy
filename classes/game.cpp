@@ -19,7 +19,7 @@ void Game::drawMenu(Menu targetMenu) {
 	this->drawMenuTitle(targetMenu.title);
 
 	for (int i = 0; i < MENU_LIST_LENGTH; i ++) {
-		char label = targetMenu.list.label;
+		char label = targetMenu.list[i].label;
 		this->drawMenuItem(label, i);
 	}
 };
@@ -29,7 +29,7 @@ void Game::drawMenuItem(char label, int line) {
 	int text_x = 0;
 	int numChars = sizeof(label) - 1; // count number of chars in label
 	int screenWidthInChars = 128 / CHAR_WIDTH;
-	char outputString = '';
+	char outputString = ' ';
 
 	//  if number of chars in label is less than screen width divided by char width
 	if (numChars < screenWidthInChars) {
@@ -37,7 +37,7 @@ void Game::drawMenuItem(char label, int line) {
 		outputString = label;
 	} else {
 		text_x = 0;
-		// TODO: chop title to max width
+		// TODO: chop label to max width
 		outputString = label;
 	}
 
@@ -47,30 +47,29 @@ void Game::drawMenuItem(char label, int line) {
 void Game::drawMenuTitle(char title) {
 	int text_y = 0;
 	int text_x = 0;
-	int numChars = sizeof(label) - 1; // count number of chars in label
+	int numChars = sizeof(title) - 1; // count number of chars in label
 	int screenWidthInChars = 128 / CHAR_WIDTH;
-	char outputString = '';
+	char outputString = ' ';
 
 	//  if number of chars in label is less than screen width divided by char width
 	if (numChars < screenWidthInChars) {
 		text_x = screenWidthInChars - (numChars / 2);
-		outputString = label;
+		outputString = title;
 	} else {
 		text_x = 0;
 		// TODO: chop title to max width
-		outputString = label;
+		outputString = title;
 	}
 
 	this->drawText(text_x, text_y, outputString);
 };
 
-void Game::drawText() {
-	// TODO:
+void Game::drawText(int x, int y, char text) {
 	// we set our cursor x pixels to the right and y down from the top
-	//	arduboy->setCursor(this->cursor_x * CHAR_WIDTH, this->cursor_y * CHAR_HEIGHT);
+	arduboy->setCursor(x * CHAR_WIDTH, y * CHAR_HEIGHT);
 
 	// then we print to screen what is stored in our text variable we declared earlier
-	//	arduboy->print(text);
+	arduboy->print(text);
 };
 
 void Game::handleInput() {
@@ -239,9 +238,6 @@ void Game::setup() {
 
 void Game::start() {
 	// TODO: Figure out how to call this only when transitioning from Main Menu screen to Gameplay screen
-
-	// TODO: shift this->currentState to STATE_PLAY and init the random seed
-	// TODO: Call this->arduboy->initRandomSeed() on game start rather than calling randomSeed() manually at boot-time
 	if (RANDOM_SEED_DEBUG == 1) {
 		randomSeed(RANDOM_SEED_VALUE);
 	} else {

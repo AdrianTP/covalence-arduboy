@@ -39,6 +39,15 @@ class Game {
 		//
 		void drawMenu(Menu targetMenu);
 
+		//
+		void drawMenuItem(char label, int line);
+
+		//
+		void drawMenuTitle(char title);
+
+		//
+		void drawText(int x, int y, char text);
+
 		// Processes the button-press data provided by the internal Arduboy instance
 		void handleInput();
 
