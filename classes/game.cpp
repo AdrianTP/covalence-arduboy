@@ -16,32 +16,35 @@ void Game::draw() {
 };
 
 void Game::drawMenu(Menu targetMenu) {
+	this->menuLength = 0;
 	this->drawMenuTitle(targetMenu.title);
 
 	for (int i = 0; i < MENU_LIST_LENGTH; i ++) {
 		char label = targetMenu.list[i].label;
-		this->drawMenuItem(label, i);
+		int state = targetMenu.list[i].state;
+
+		if (state > -1) { // -1 means invisible
+			this->drawMenuItem(label, i);
+			this->menuLength ++;
+		}
 	}
 };
 
 void Game::drawMenuItem(char label, int line) {
 	int text_y = (line + 1) * CHAR_HEIGHT;
-	int text_x = 0;
-	int numChars = sizeof(label) - 1; // count number of chars in label
+	int numChars = 0;
 	int screenWidthInChars = 128 / CHAR_WIDTH;
-	char outputString = ' ';
+	int text_x = (screenWidthInChars / 2) - (numChars / 2);
 
-	//  if number of chars in label is less than screen width divided by char width
-	if (numChars < screenWidthInChars) {
-		text_x = screenWidthInChars - (numChars / 2);
-		outputString = label;
-	} else {
-		text_x = 0;
-		// TODO: chop label to max width
-		outputString = label;
+	if (this->menu_y == line) {
+		this->drawText(text_x - 1, text_y, '[');
 	}
 
-	this->drawText(text_x, text_y, outputString);
+	this->drawText(text_x, text_y, label);
+
+	if (this->menu_y == line) {
+		this->drawText(text_x + numChars + 1, text_y, ']');
+	}
 };
 
 void Game::drawMenuTitle(char title) {
@@ -49,19 +52,10 @@ void Game::drawMenuTitle(char title) {
 	int text_x = 0;
 	int numChars = sizeof(title) - 1; // count number of chars in label
 	int screenWidthInChars = 128 / CHAR_WIDTH;
-	char outputString = ' ';
 
-	//  if number of chars in label is less than screen width divided by char width
-	if (numChars < screenWidthInChars) {
-		text_x = screenWidthInChars - (numChars / 2);
-		outputString = title;
-	} else {
-		text_x = 0;
-		// TODO: chop title to max width
-		outputString = title;
-	}
+	text_x = (screenWidthInChars / 2) - (numChars / 2);
 
-	this->drawText(text_x, text_y, outputString);
+	this->drawText(text_x, text_y, title);
 };
 
 void Game::drawText(int x, int y, char text) {

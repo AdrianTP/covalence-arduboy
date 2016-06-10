@@ -15,7 +15,7 @@ const int MENU_LIST_LENGTH = 3;
 // Struct for menu items
 typedef struct MenuItem {
 	char label;
-	char state;
+	int state;
 };
 
 // Struct for menu screens

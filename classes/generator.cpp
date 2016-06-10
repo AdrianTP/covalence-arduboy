@@ -4,7 +4,6 @@
 #include "../headers/generator.h"
 
 Generator::Generator() {
-
 	for (int i = 0; i < QUEUE_LENGTH; i ++) {
 		this->queue[i] = -1;
 	}
@@ -19,9 +18,7 @@ void Generator::addAtomIdToEndOfQueue(int atomId) {
 };
 
 int Generator::getRandomAtomValence() {
-	int atomValence = random(1, 5);
-
-	return atomValence;
+	return random(1, 5);
 }
 
 int Generator::getNumAtoms() {
@@ -42,14 +39,6 @@ int Generator::pullAtomIdOffFrontOfQueue() {
 	}
 };
 
-int Generator::swapAtomIdOnFrontOfQueue(int atomId) {
-	int topOfQueueId = this->queue[0];
-
-	this->queue[0] = atomId;
-
-	return topOfQueueId;
-};
-
 void Generator::scoot() {
 	for (int i = 0; i < this->numAtoms; i ++) {
 		if (i == this->numAtoms) {
@@ -58,4 +47,12 @@ void Generator::scoot() {
 			this->queue[i] = queue[i + 1];
 		}
 	}
+};
+
+int Generator::swapAtomIdOnFrontOfQueue(int atomId) {
+	int topOfQueueId = this->queue[0];
+
+	this->queue[0] = atomId;
+
+	return topOfQueueId;
 };
