@@ -4,9 +4,7 @@
 #include "../headers/generator.h"
 
 Generator::Generator() {
-	for (int i = 0; i < QUEUE_LENGTH; i ++) {
-		this->queue[i] = -1;
-	}
+	this->init();
 };
 
 Generator::~Generator() {};
@@ -23,6 +21,12 @@ int Generator::getRandomAtomValence() {
 
 int Generator::getNumAtoms() {
 	return this->numAtoms;
+};
+
+void Generator::init() {
+	for (int i = 0; i < QUEUE_LENGTH; i ++) {
+		this->queue[i] = -1;
+	}
 };
 
 int Generator::pullAtomIdOffFrontOfQueue() {

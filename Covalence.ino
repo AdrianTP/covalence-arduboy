@@ -1,33 +1,16 @@
-/*
-Buttons example
-June 11, 2015
-Copyright (C) 2015 David Martinez
-All rights reserved.
-This code is the most basic barebones code for showing how to use buttons in
-Arduboy.
-
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
-*/
-
 #include "Arduino.h"
 #include "Arduboy.h"
+
 #include "atom_bitmaps.h"
 #include "headers/config.h"
+#include "headers/menus.h"
+
 #include "headers/atom.h"
 #include "headers/board.h"
+#include "headers/buttons.h"
 #include "headers/generator.h"
 #include "headers/manifest.h"
 #include "headers/game.h"
-
-// TODO:
-// arrow buttons change cursor location
-// if cursor empty
-	// remove first atom from queue and place in cursor location
-// else
-	// swap atoms
 
 // TODO: Figure out how to display bitmaps at precise locations on screen
 // TODO: grid is 8x8 spaces
@@ -38,11 +21,26 @@ version 2.1 of the License, or (at your option) any later version.
 
 Game game;
 
+//Arduboy arduboy;
+
 void setup() {
 	game.setup();
+
+//arduboy.begin();
+//arduboy.setFrameRate(15);
 }
 
 
 void loop() {
 	game.tick();
+
+//if (!(arduboy.nextFrame())) {
+//	return;
+//}
+//
+//arduboy.clear();
+//arduboy.setCursor(4, 9);
+//
+//arduboy.print(F("Hello, world!"));
+//arduboy.display();
 }

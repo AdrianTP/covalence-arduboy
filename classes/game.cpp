@@ -1,10 +1,13 @@
 #include "Arduino.h"
 #include "Arduboy.h"
+
 #include "../headers/config.h"
 #include "../headers/board.h"
+#include "../headers/buttons.h"
 #include "../headers/generator.h"
 #include "../headers/manifest.h"
 #include "../headers/menus.h"
+
 #include "../headers/game.h"
 
 Game::Game() {};
@@ -15,50 +18,44 @@ void Game::draw() {
 	// TODO:
 };
 
-void Game::drawMenu(Menu targetMenu) {
-	this->menuLength = 0;
+void Game::drawMenu(const Menu& targetMenu) {
+	this->menuLength = targetMenu.numItems;
 	this->drawMenuTitle(targetMenu.title);
 
-	for (int i = 0; i < MENU_LIST_LENGTH; i ++) {
-		char label = targetMenu.list[i].label;
-		int state = targetMenu.list[i].state;
-
-		if (state > -1) { // -1 means invisible
-			this->drawMenuItem(label, i);
-			this->menuLength ++;
-		}
+	for (int line = 0; line < this->menuLength; line ++) {
+		this->drawMenuItem(targetMenu.list[line], line);
 	}
 };
 
-void Game::drawMenuItem(char label, int line) {
-	int text_y = (line + 1) * CHAR_HEIGHT;
-	int numChars = 0;
+void Game::drawMenuItem(const MenuItem& item, int line) {
+	int text_y = (line + 2);
 	int screenWidthInChars = 128 / CHAR_WIDTH;
-	int text_x = (screenWidthInChars / 2) - (numChars / 2);
+	// TODO: figure out centred text
+//	int halfChars = item.numChars % 2 == 0 ? (item.numChars / 2) : ((item.numChars - 1) / 2);
+	int text_x = 1;//(screenWidthInChars / 2) - halfChars;
 
 	if (this->menu_y == line) {
-		this->drawText(text_x - 1, text_y, '[');
+		this->drawText(text_x - 1, text_y, ">");
 	}
 
-	this->drawText(text_x, text_y, label);
+	this->drawText(text_x, text_y, item.label);
 
-	if (this->menu_y == line) {
-		this->drawText(text_x + numChars + 1, text_y, ']');
-	}
+//	if (this->menu_y == line) {
+//		this->drawText(text_x + item.numChars, text_y, "]");
+//	}
 };
 
-void Game::drawMenuTitle(char title) {
+void Game::drawMenuTitle(const MenuTitle& title) {
 	int text_y = 0;
-	int text_x = 0;
-	int numChars = sizeof(title) - 1; // count number of chars in label
 	int screenWidthInChars = 128 / CHAR_WIDTH;
+	// TODO: Figure out centred text and brackets
+//	int halfChars = title.numChars % 2 == 0 ? (title.numChars / 2) : ((title.numChars - 1) / 2);
+	int text_x = 1;//(screenWidthInChars / 2) - halfChars;
 
-	text_x = (screenWidthInChars / 2) - (numChars / 2);
-
-	this->drawText(text_x, text_y, title);
+	this->drawText(text_x, text_y, title.label);
 };
 
-void Game::drawText(int x, int y, char text) {
+void Game::drawText(int x, int y, const char text[]) {
 	// we set our cursor x pixels to the right and y down from the top
 	arduboy->setCursor(x * CHAR_WIDTH, y * CHAR_HEIGHT);
 
@@ -67,26 +64,31 @@ void Game::drawText(int x, int y, char text) {
 };
 
 void Game::handleInput() {
-	if (this->currentState == STATE_PLAY) {
+	this->buttonsCurrent = this->readButtons();
+
+	if (this->currentState == ScreenState::PLAY) {
 		this->handlePlayInput();
 	} else {
 		this->handleMenuInput();
 	}
+
+	this->buttonsPrevious = this->buttonsCurrent;
 };
 
 void Game::handleMenuInput() {
 	// if the up button is pressed move tyhe cursor up
-	if (this->arduboy->pressed(UP_BUTTON) && this->menu_y > 0) {
+	if (this->buttonsCurrent.up && this->buttonsCurrent.up != this->buttonsPrevious.up && this->menu_y > 0) {
 		this->menu_y --;
 	}
 
 	// if the down button is pressed move the cursor down
-	if (this->arduboy->pressed(DOWN_BUTTON) && this->menu_y < this->menuLength) {
+	if (this->buttonsCurrent.down && this->buttonsCurrent.down != this->buttonsPrevious.down && this->menu_y < this->menuLength - 1) {
 		this->menu_y ++;
 	}
 
-	if (this->arduboy->pressed(A_BUTTON)) {
+	if (this->buttonsCurrent.a && this->buttonsCurrent.a != this->buttonsPrevious.a) {
 		this->currentState = this->targetState;
+		this->menu_y = 0;
 	}
 };
 
@@ -94,33 +96,37 @@ void Game::handlePlayInput() {
 	// TODO: This might be too sensitive for a tick-based game. In fact, I am positive it will be.
 	// TODO: We may wish to only move the cursor after button is released.
 	// TODO: We may wish to enable wrapping at edges since we're relying on a d-pad rather than a mouse or touch input.
+	
+	// TODO:
+	// arrow buttons change cursor location
+	// if cursor empty
+		// remove first atom from queue and place in cursor location
+	// else
+		// swap atoms
 
-	// if the right button is pressed move the cursor to the right
-	if (this->arduboy->pressed(RIGHT_BUTTON)) {
-		this->cursor_x ++;
-	}
-
-	// if the left button is pressed move the cursor to the left
-	if (this->arduboy->pressed(LEFT_BUTTON) && this->cursor_x > 0) {
-		this->cursor_x --;
-	}
-
-	// if the up button or B button is pressed move tyhe cursor up
-	if (this->arduboy->pressed(UP_BUTTON) && this->cursor_y > 0) {
-		this->cursor_y --;
-	}
-
-	// if the down button or A button is pressed move the cursor down
-	if (this->arduboy->pressed(DOWN_BUTTON) && this->cursor_y < BOARD_HEIGHT) {
+	if (this->buttonsCurrent.down && this->buttonsCurrent.down != this->buttonsPrevious.down && this->cursor_y < BOARD_HEIGHT) {
 		this->cursor_y ++;
 	}
 
-	if (this->arduboy->pressed(A_BUTTON)) {
+	if (this->buttonsCurrent.left && this->buttonsCurrent.left != this->buttonsPrevious.left && this->cursor_x > 0) {
+		this->cursor_x --;
+	}
+
+	if (this->buttonsCurrent.right && this->buttonsCurrent.right != this->buttonsPrevious.right && this->cursor_x < BOARD_WIDTH) {
+		this->cursor_x ++;
+	}
+
+	if (this->buttonsCurrent.up && this->buttonsCurrent.up != this->buttonsPrevious.up && this->cursor_y > 0) {
+		this->cursor_y --;
+	}
+
+	if (this->buttonsCurrent.a && this->buttonsCurrent.a != this->buttonsPrevious.a) {
 //		this->doAtomThing(); // TODO: grab atom
 	}
 
-	if (this->arduboy->pressed(B_BUTTON)) {
-		this->currentState = STATE_MENU_PAUSE;
+	if (this->buttonsCurrent.b) {
+		this->currentState = ScreenState::PAUSE;
+		// TODO: pause game timer or something?
 	}
 };
 
@@ -153,65 +159,134 @@ void Game::handleStatePlay() {
 	// TODO: output graphics somehow
 	// TODO: Finish game logic
 
-	if (this->lastAtomMillis + millis() > this->millisLimit) {
-		int generatedValence = this->generator->getRandomAtomValence();
-
-		int atomId = this->manifest->addAtom(generatedValence);
-
-		this->generator->addAtomIdToEndOfQueue(atomId);
-
-		lastAtomMillis = millis();
-	}
-
-	if (this->arduboy->pressed(A_BUTTON)) { // button pressed
-		int currentCellAtom = this->board->getAtomIdAtCoords(this->cursor_x, this->cursor_y);
-		int nextAtomId = -1;
-
-		if (currentCellAtom == -1) { // if no atom present at current coords
-			nextAtomId = this->generator->pullAtomIdOffFrontOfQueue(); // pull atom off queue and place at coords
-		} else { // if atom present at current coords
-			nextAtomId = this->generator->swapAtomIdOnFrontOfQueue(currentCellAtom); // swap atom on queue with atom at coords
-		}
-
-		this->board->setAtomIdAtCoords(this->cursor_x, this->cursor_y, nextAtomId);
-	}
+//	if (this->lastAtomMillis + millis() > this->millisLimit) {
+//		int generatedValence = this->generator->getRandomAtomValence();
+//
+//		int atomId = this->manifest->addAtom(generatedValence);
+//
+//		this->generator->addAtomIdToEndOfQueue(atomId);
+//
+//		lastAtomMillis = millis();
+//	}
+//
+//	if (this->arduboy->pressed(A_BUTTON)) { // button pressed
+//		int currentCellAtom = this->board->getAtomIdAtCoords(this->cursor_x, this->cursor_y);
+//		int nextAtomId = -1;
+//
+//		if (currentCellAtom == -1) { // if no atom present at current coords
+//			nextAtomId = this->generator->pullAtomIdOffFrontOfQueue(); // pull atom off queue and place at coords
+//		} else { // if atom present at current coords
+//			nextAtomId = this->generator->swapAtomIdOnFrontOfQueue(currentCellAtom); // swap atom on queue with atom at coords
+//		}
+//
+//		this->board->setAtomIdAtCoords(this->cursor_x, this->cursor_y, nextAtomId);
+//	}
 };
 
 void Game::handleState() {
 	switch (this->currentState) {
 		// If we are currently playing the game
-		case STATE_PLAY:
+		case ScreenState::PLAY:
 			this->handleStatePlay();
 			break;
 
 		// If we are at the Pause screen
-		case STATE_MENU_PAUSE:
+		case ScreenState::PAUSE:
 			this->handleStatePause();
 			break;
 
 		// If we are at the Game Over screen
-		case STATE_MENU_OVER:
+		case ScreenState::OVER:
 			this->handleStateOver();
 			break;
 
 		// If we are at the Main Menu screen
-		case STATE_MENU_MAIN:
+		case ScreenState::MAIN:
 			this->handleStateMain();
 			break;
 
 		// If we are at the Credits screen
-		case STATE_MENU_CREDITS:
+		case ScreenState::CREDITS:
 			this->handleStateCredits();
 			break;
 
 		// If we are at the High Scores screen
-		case STATE_MENU_SCORES:
+		case ScreenState::SCORES:
 			this->handleStateScores();
 			break;
 	}
 };
 
+ButtonState Game::readButtons() {
+	ButtonState current = {
+		this->arduboy->pressed(A_BUTTON),
+		this->arduboy->pressed(B_BUTTON),
+		this->arduboy->pressed(DOWN_BUTTON),
+		this->arduboy->pressed(LEFT_BUTTON),
+		this->arduboy->pressed(RIGHT_BUTTON),
+		this->arduboy->pressed(UP_BUTTON)
+	};
+
+	return current;
+};
+
+void Game::serialDebug() {
+	if (!SERIAL_DEBUG) {
+		return;
+	}
+
+	if (this->arduboy->pressed(RIGHT_BUTTON)) {
+		Serial.println("RIGHT");
+	}
+
+	if (this->arduboy->pressed(LEFT_BUTTON)) {
+		Serial.println("LEFT");
+	}
+
+	// if the up button or B button is pressed move tyhe cursor up
+	if (this->arduboy->pressed(UP_BUTTON)) {
+		Serial.println("UP");
+	}
+
+	// if the down button or A button is pressed move the cursor down
+	if (this->arduboy->pressed(DOWN_BUTTON) && this->cursor_y < BOARD_HEIGHT) {
+		Serial.println("DOWN");
+	}
+
+	if (this->arduboy->pressed(A_BUTTON)) {
+		Serial.println("A");
+	}
+
+//	if (this->arduboy->pressed(B_BUTTON)) {
+//		Serial.println("B");
+//	}
+
+	if (millis() - this->lastDebugMillis > SERIAL_DEBUG_INTERVAL) {
+		Serial.print(       "=============== ");    Serial.print(millis());             Serial.println();
+		Serial.print(       "cursor_x:       ");    Serial.print(this->cursor_x);       Serial.println();
+		Serial.print(       "cursor_y:       ");    Serial.print(this->cursor_y);       Serial.println();
+		Serial.print(       "currenState:    ");    Serial.print(this->currentState);   Serial.println();
+		Serial.print(       "lastAtomMillis: ");    Serial.print(this->lastAtomMillis); Serial.println();
+		Serial.print(       "menuLength:     ");    Serial.print(this->menuLength);     Serial.println();
+		Serial.print(       "menu_y:         ");    Serial.print(this->menu_y);         Serial.println();
+		Serial.println();
+
+		this->lastDebugMillis = millis();
+	}
+};
+
+void Game::serialPrint(const char blah[]) {
+	if (SERIAL_DEBUG) {
+		Serial.print(blah);
+	}
+};
+
 void Game::setup() {
+	if (SERIAL_DEBUG) {
+		Serial.begin(9600);
+		this->lastDebugMillis = millis();
+	}
+
 	this->cursor_x = BOARD_WIDTH / 2;
 	this->cursor_y = BOARD_HEIGHT / 2;
 	this->currentState = STATE_INIT; // Initialise the game state machine
@@ -223,20 +298,21 @@ void Game::setup() {
 	this->arduboy = new Arduboy();
 	this->board = new Board();
 	this->generator = new Generator();
-	this->manifest = new Manifest();
+//	this->manifest = new Manifest(); // TODO: Figure out why this breaks the boot sequence when it is uncommented
 
+	this->arduboy->begin();
 	this->arduboy->setFrameRate(FRAMERATE);
 };
 
 void Game::start() {
 	// TODO: Figure out how to call this only when transitioning from Main Menu screen to Gameplay screen
-	if (RANDOM_SEED_DEBUG == 1) {
+	if (RANDOM_SEED_DEBUG) {
 		randomSeed(RANDOM_SEED_VALUE);
 	} else {
 		this->arduboy->initRandomSeed();
 	}
 
-	this->currentState = STATE_PLAY;
+	this->currentState = ScreenState::PLAY;
 };
 
 void Game::tick() {
@@ -246,7 +322,7 @@ void Game::tick() {
 	}
 
 	// we clear our screen to black
-	arduboy->clear();
+	this->arduboy->clear();
 
 	// Move along...
 	this->handleState();
@@ -254,5 +330,7 @@ void Game::tick() {
 	this->handleInput();
 
 	// then we finaly we tell the arduboy to display what we just wrote to the display.
-	arduboy->display();
+	this->arduboy->display();
+
+	this->serialDebug();
 };

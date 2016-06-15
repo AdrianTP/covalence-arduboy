@@ -2,75 +2,82 @@
 #define MENUS_H
 
 // State machine values
-const int STATE_INIT = 2;           // Which of the below states should the game start in?
-const int STATE_MENU_CREDITS = 1;   // Credits screen
-const int STATE_MENU_MAIN = 2;      // Main Menu screen     --  menu: Start, High Scores, Credits   --
-const int STATE_MENU_OVER = 3;      // Game Over screen     --  menu: Main Menu                     --
-const int STATE_MENU_PAUSE = 4;     // Pause screen         --  menu: Resume, Quit                  --
-const int STATE_MENU_SCORES = 5;    // High scores screen   --  menu: Back                          --
-const int STATE_PLAY = 6;           // Gameplay screen      --  menu: (none)                        --  buttons:
+namespace ScreenState {
+	enum ScreenState {
+		CREDITS,    // Credits screen
+		MAIN,       // Main Menu screen
+		OVER,       // Game Over screen
+		PAUSE,      // Pause screen
+		PLAY,       // Gameplay screen
+		SCORES      // High Scores screen
+	};
+};
+
+const int STATE_INIT = 1;
 
 const int MENU_LIST_LENGTH = 3;
+const int MENU_STRING_LENGTH = 12;
 
 // Struct for menu items
-typedef struct MenuItem {
-	char label;
-	int state;
+struct MenuItem {
+	char label[MENU_STRING_LENGTH]; // The actual string
+	int numChars; // The length of the visible portion of the string (for screen math)
+	int state; // The target state
+};
+
+// Struct for menu titles
+struct MenuTitle {
+	char label[MENU_STRING_LENGTH]; // The actual string
+	int numChars; // The length of the visible portion of the string (for screen math)
 };
 
 // Struct for menu screens
-typedef struct Menu {
-	char title;
-	MenuItem list[MENU_LIST_LENGTH];
+struct Menu {
+	MenuTitle title; // The menu title text
+	int numItems; // The number of menu items
+	MenuItem list[MENU_LIST_LENGTH]; // The array of menu items to display
 };
 
 // Credits screen
 const Menu MENU_CREDITS = {
-	'Credits',
+	{ "Credits", 7 }, 1,
 	{
-		{ 'Main Menu', STATE_MENU_MAIN },
-		{ ' ', -1 },
-		{ ' ', -1 }
+		{ "Main Menu", 9, ScreenState::MAIN }
 	}
 };
 
 // Main Menu screen
 const Menu MENU_MAIN = {
-	'Covalence',
+	{ "Covalence", 9, }, 3,
 	{
-		{ 'Play', STATE_PLAY },
-		{ 'High Scores', STATE_MENU_SCORES },
-		{ 'Credits', STATE_MENU_CREDITS }
+		{ "Play", 4, ScreenState::PLAY },
+		{ "High Scores", 11, ScreenState::SCORES },
+		{ "Credits", 7, ScreenState::CREDITS }
 	}
 };
 
 // Game Over screen
 const Menu MENU_OVER = {
-	'Game Over',
+	{ "Game Over", 9 }, 1,
 	{
-		{ 'Main Menu', STATE_MENU_MAIN },
-		{ ' ', -1 },
-		{ ' ', -1 }
+		{ "Main Menu", 9, ScreenState::MAIN }
 	}
 };
 
 // Pause screen
 const Menu MENU_PAUSE = {
-	'Paused',
+	{ "Paused", 6 }, 2,
 	{
-		{ 'Resume', STATE_PLAY },
-		{ 'Quit', STATE_MENU_OVER },
-		{ ' ', -1 }
+		{ "Resume", 6, ScreenState::PLAY },
+		{ "Quit", 4, ScreenState::OVER }
 	}
 };
 
 // High Scores screen
 const Menu MENU_SCORES = {
-	'High Scores',
+	{ "High Scores", 11 }, 1,
 	{
-		{ 'Main Menu', STATE_MENU_MAIN },
-		{ ' ', -1 },
-		{ ' ', -1 }
+		{ "Main Menu", 9, ScreenState::MAIN }
 	}
 };
 

@@ -19,6 +19,9 @@ class Board {
 		// Gets the id of the Atom which is stored in the specified cell
 		int getAtomIdAtCoords(int x, int y);
 
+		//
+		void init();
+
 		// Sets the value of the specified cell to the specified Atom id
 		void setAtomIdAtCoords(int x, int y, int atomId);
 };

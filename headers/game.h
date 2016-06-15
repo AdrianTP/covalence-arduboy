@@ -6,7 +6,8 @@ class Board;
 class Generator;
 class Manifest;
 
-typedef struct Menu;
+struct ButtonState;
+struct Menu;
 
 class Game {
 	private:
@@ -17,10 +18,13 @@ class Game {
 		Manifest* manifest;
 
 		// Vars
+		ButtonState buttonsCurrent;
+		ButtonState buttonsPrevious;
 		int cursor_x;
 		int cursor_y;
-		int currentState; // STATE_INIT, STATE_MENU, STATE_OVER, STATE_PAUSE, STATE_PLAY
-		int lastAtomMillis;
+		int currentState; // STATE_INIT, ScreenState
+		unsigned long lastAtomMillis;
+		unsigned long lastDebugMillis;
 		int menuLength;
 		int menu_y;
 		int millisLimit;
@@ -37,16 +41,16 @@ class Game {
 		void draw();
 
 		//
-		void drawMenu(Menu targetMenu);
+		void drawMenu(const Menu& targetMenu);
 
 		//
-		void drawMenuItem(char label, int line);
+		void drawMenuItem(const MenuItem& item, int line);
 
 		//
-		void drawMenuTitle(char title);
+		void drawMenuTitle(const MenuTitle& title);
 
 		//
-		void drawText(int x, int y, char text);
+		void drawText(int x, int y, const char text[]);
 
 		// Processes the button-press data provided by the internal Arduboy instance
 		void handleInput();
@@ -77,6 +81,15 @@ class Game {
 
 		//
 		void handleState();
+
+		//
+		ButtonState readButtons();
+
+		//
+		void serialDebug();
+
+		//
+		void serialPrint(const char blah[]);
 
 		// Initialises this instance of the Game class
 		void setup();

@@ -27,6 +27,9 @@ class Generator {
 		// Returns the current number of non-negative cells in this->queue[]
 		int getNumAtoms();
 
+		//
+		void init();
+
 		// Returns the id on the front of the queue and calls this->scoot() to reindex the array
 		int pullAtomIdOffFrontOfQueue();
 

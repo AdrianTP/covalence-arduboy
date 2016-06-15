@@ -28,8 +28,12 @@ const int GENERATOR_STEP_ITERATIONS = 5; // Shorten the Generator tick length af
 const int QUEUE_LENGTH = 8;
 
 // Whether to seed the RNG for debug
-const int RANDOM_SEED_DEBUG = 1; // 1 to use seed, 0 to not
+const bool RANDOM_SEED_DEBUG = true;
 const int RANDOM_SEED_VALUE = 100; // Value to seed RNG with for repeatability
+
+// Whether to output debug info to the Serial console;
+const bool SERIAL_DEBUG = true;
+const int SERIAL_DEBUG_INTERVAL = 1000;
 
 // Number of points per bond
 const int SCORE_MULTIPLIER = 100;
