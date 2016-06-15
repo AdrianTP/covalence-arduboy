@@ -49,7 +49,7 @@
         <entry file="file://$PROJECT_DIR$/classes/game.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="333">
-              <caret line="295" column="57" selection-start-line="295" selection-start-column="57" selection-end-line="295" selection-end-column="57" />
+              <caret line="295" column="46" selection-start-line="295" selection-start-column="46" selection-end-line="295" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -275,12 +275,12 @@
       <workItem from="1465334640683" duration="4476000" />
       <workItem from="1465339402729" duration="15574000" />
       <workItem from="1465420424101" duration="25134000" />
-      <workItem from="1465925910060" duration="14808000" />
+      <workItem from="1465925910060" duration="15009000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="102279000" />
+    <option name="totallyTimeSpent" value="102480000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1135" extended-state="6" />
@@ -690,7 +690,7 @@
     <entry file="file://$PROJECT_DIR$/classes/game.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="333">
-          <caret line="295" column="57" selection-start-line="295" selection-start-column="57" selection-end-line="295" selection-end-column="57" />
+          <caret line="295" column="46" selection-start-line="295" selection-start-column="46" selection-end-line="295" selection-end-column="46" />
           <folding />
         </state>
       </provider>

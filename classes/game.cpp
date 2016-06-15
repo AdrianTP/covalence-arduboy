@@ -293,7 +293,7 @@ void Game::setup() {
 	this->lastAtomMillis = 0;
 	this->menuLength = 0;
 	this->menu_y = 0;
-	this->millisLimit = GENERATOR_MILLIS_INIT; // testing
+	this->millisLimit = GENERATOR_MILLIS_INIT;
 
 	this->arduboy = new Arduboy();
 	this->board = new Board();
