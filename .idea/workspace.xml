@@ -48,8 +48,8 @@
       <file leaf-file-name="game.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/classes/game.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="300" column="113" selection-start-line="300" selection-start-column="113" selection-end-line="300" selection-end-column="113" />
+            <state relative-caret-position="333">
+              <caret line="295" column="57" selection-start-line="295" selection-start-column="57" selection-end-line="295" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -89,11 +89,11 @@
         <option value="$PROJECT_DIR$/headers/buttons.h" />
         <option value="$PROJECT_DIR$/headers/game.h" />
         <option value="$PROJECT_DIR$/Covalence.ino" />
-        <option value="$PROJECT_DIR$/classes/game.cpp" />
         <option value="$PROJECT_DIR$/classes/board.cpp" />
         <option value="$PROJECT_DIR$/classes/generator.cpp" />
         <option value="$PROJECT_DIR$/headers/generator.h" />
         <option value="$PROJECT_DIR$/headers/board.h" />
+        <option value="$PROJECT_DIR$/classes/game.cpp" />
       </list>
     </option>
   </component>
@@ -275,12 +275,12 @@
       <workItem from="1465334640683" duration="4476000" />
       <workItem from="1465339402729" duration="15574000" />
       <workItem from="1465420424101" duration="25134000" />
-      <workItem from="1465925910060" duration="14207000" />
+      <workItem from="1465925910060" duration="14808000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="101678000" />
+    <option name="totallyTimeSpent" value="102279000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1135" extended-state="6" />
@@ -689,8 +689,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/classes/game.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="300" column="113" selection-start-line="300" selection-start-column="113" selection-end-line="300" selection-end-column="113" />
+        <state relative-caret-position="333">
+          <caret line="295" column="57" selection-start-line="295" selection-start-column="57" selection-end-line="295" selection-end-column="57" />
           <folding />
         </state>
       </provider>
